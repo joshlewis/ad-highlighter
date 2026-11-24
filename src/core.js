@@ -133,14 +133,12 @@ const adHighlighter = (() => {
 
   // The opacity, from 0 to 1, of a computed CSS color such as
   // "rgba(0, 0, 0, 0.5)", "rgb(0, 0, 0)" or "color(display-p3 0 0 0 / 0.5)".
-  // A color with no opacity value is fully opaque.
+  // A color with no opacity value is fully opaque. The browser always
+  // writes the opacity of a computed color as a number, never a percent.
   function backgroundOpacity(color) {
-    let alpha = null;
-    if (color.includes('/')) alpha = color.slice(color.lastIndexOf('/') + 1);
-    else if (color.startsWith('rgba(')) alpha = color.split(',')[3];
-    if (alpha === null) return 1;
-    const value = parseFloat(alpha);
-    return alpha.includes('%') ? value / 100 : value;
+    if (color.includes('/')) return parseFloat(color.slice(color.lastIndexOf('/') + 1));
+    if (color.startsWith('rgba(')) return parseFloat(color.split(',')[3]);
+    return 1;
   }
 
   // True when element is, or sits inside, a part of post that matches

@@ -2,9 +2,7 @@
 
 A Chrome extension that paints ads bright yellow, so you can tell at a glance what is an ad and what isn't.
 
-![Left: an ad on X that looks like any other post. Right: the same ad with Ad Highlighter, painted bright yellow with dark text.](screenshots/before-after.png)
-
-Left: an ad on X as X shows it. Right: the same ad with Ad Highlighter.
+![Without Ad Highlighter, an ad on X looks like the posts around it. With Ad Highlighter, the same ad is bright yellow with dark text, and the posts around it stay as they were.](screenshots/before-after.png)
 
 **Works on:** X (x.com)
 
@@ -29,8 +27,8 @@ The code is short, so you can check this yourself in [`src/`](src/).
 
 It has no noticeable effect on speed. Measured on a live X feed with about 20 posts loaded:
 
-- While you scroll, it scans the page about 10 times a second. A scan takes about 0.7 ms on average and 2 ms at most. One frame on a 60 Hz screen lasts 16.7 ms.
-- In all, it uses less than 1% of the browser's time while you scroll, and about 0.1% while the page sits still.
+- While you scroll, it scans the page about 9 times a second. A scan takes about 0.8 ms on average and 3 ms at most. One frame on a 60 Hz screen lasts 16.7 ms.
+- In all, it uses less than 1% of the browser's time while you scroll, and less than 0.2% while the page sits still.
 - The yellow coloring adds no cost that could be measured when the browser redraws the page.
 
 ## Install
@@ -65,7 +63,7 @@ Each site is one small file in `src/sites/`. To add one:
 1. Copy `src/sites/x.js` to a new file, such as `src/sites/example.js`.
 2. In it, write `posts()`, which returns the posts on the page, and `isAd(post)`, which returns true for an ad. The helpers in `src/core.js` cover the common cases.
 3. Add an entry for the site to `content_scripts` in `manifest.json`. List `src/core.js` before the new file, and include `src/highlight.css`.
-4. Add tests for the site to `test/`, like `test/x.test.js`.
+4. Add tests for the site to `test/`, like `test/x.test.js`. The shared code already has its own tests in `test/core.test.js`.
 
 A site can also have its own CSS file for small changes to the look, like `src/sites/x.css`.
 
