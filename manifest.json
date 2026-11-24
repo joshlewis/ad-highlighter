@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Ad Highlighter",
+  "version": "1.0.0",
+  "description": "Paints ads bright yellow so you can tell at a glance what is an ad and what isn't.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://x.com/*", "https://twitter.com/*"],
+      "js": ["src/core.js", "src/sites/x.js"],
+      "css": ["src/highlight.css", "src/sites/x.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

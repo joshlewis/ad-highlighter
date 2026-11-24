@@ -1,0 +1,7 @@
+/* X: changes to the shared look in src/highlight.css. */
+
+/* Links in a post's text lose X's blue on yellow, so underline them to keep
+   them visible. X tags the text an author wrote with its language. */
+[data-ad-highlighter] [lang] a {
+  text-decoration: underline !important;
+}

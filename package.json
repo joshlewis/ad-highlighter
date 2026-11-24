@@ -1,0 +1,11 @@
+{
+  "name": "ad-highlighter",
+  "private": true,
+  "description": "Tests for the Ad Highlighter Chrome extension. The extension itself needs no build step.",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

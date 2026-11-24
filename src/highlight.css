@@ -1,0 +1,15 @@
+/* Ad Highlighter: the look of a highlighted ad, on every site.
+   src/core.js adds the data-ad-highlighter attribute to each ad. */
+
+[data-ad-highlighter] {
+  background-color: #ffe500 !important;
+}
+
+/* Dark text and icons, so the ad stays easy to read on yellow in light and
+   dark mode. Parts that src/core.js marks with
+   data-ad-highlighter-keep-colors keep the site's own colors: parts with a
+   background of their own, and parts that match the site's keepColors. */
+[data-ad-highlighter]
+  *:not([data-ad-highlighter-keep-colors], [data-ad-highlighter-keep-colors] *) {
+  color: #0f1419 !important;
+}
