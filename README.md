@@ -8,7 +8,7 @@ A Chrome extension that paints ads bright yellow, so you can tell at a glance wh
 
 ## What it does
 
-On a supported site, Ad Highlighter finds the posts that the site labels as ads and paints each one bright yellow with dark text. Every other post stays exactly as it was. Inside an ad, a part with its own background that is as wide as the ad turns yellow too, such as the bar under a link. Photos, videos, captions on them, and smaller parts with their own background (such as a "Shop now" button) keep their own colors, so their text stays readable. On Facebook, it also paints the "Sponsored" box at the side of the page.
+On a supported site, Ad Highlighter finds the posts that the site labels as ads and paints each one bright yellow with dark text. Every other post stays exactly as it was. Inside an ad, wide parts with their own background, such as the bar under a link, turn yellow too. Photos, videos, captions on them, and smaller parts such as a "Shop now" button keep their own colors, so they stay readable. On Facebook, it also paints the "Sponsored" box at the side of the page.
 
 That is all it does. There are no settings.
 
@@ -47,6 +47,8 @@ Ad Highlighter is not in the Chrome Web Store, so you load it from a folder.
 4. Click **Load unpacked** and choose the folder.
 5. Reload any open x.com or facebook.com tab.
 
+To update, get the new version the same way, click the reload button on Ad Highlighter's card in `chrome://extensions`, and reload the site's tabs.
+
 It also works in Brave, and it should work in other browsers built on Chrome, such as Edge and Arc.
 
 ## How it finds ads on X
@@ -70,9 +72,9 @@ Facebook works hard to stop scripts from reading its ad label. Today the word "A
 2. A hidden label that screen readers read.
 3. Plain text.
 
-On ads about social issues or politics, the line reads "Sponsored · Paid for by …", and that counts too. A post is an ad when any of these ways finds the label on the author's line or the line just under it, where Facebook shows it. The label must be one that a reader can see, so a hidden copy never counts. The same word anywhere else, such as in the post's text, a video or a shared post, never counts either. A fourth way finds the box at the side of the page whose heading is "Sponsored".
+A post is an ad when any of these ways finds the label on the author's line or the line just under it, where Facebook shows it. On ads about social issues or politics, that line reads "Sponsored · Paid for by …", which counts too. A hidden copy of the label never counts, and neither does the same word anywhere else, such as in the post's text, a video or a shared post. A fourth way finds the box at the side of the page whose heading is "Sponsored".
 
-Facebook draws each post on a card: white, or dark gray in dark mode. Inside the card, the bar under a link and the space beside a photo have backgrounds of their own. Ad Highlighter paints each of these yellow too, because they would otherwise hide the yellow. Links in an ad's text lose Facebook's blue, so Ad Highlighter underlines them.
+Links in an ad's text lose Facebook's blue on yellow, so Ad Highlighter underlines them.
 
 The extension reads Facebook's English labels. If your Facebook is in another language, add the words Facebook shows on ads to `AD_LABELS` in [`src/sites/facebook.js`](src/sites/facebook.js).
 
@@ -81,11 +83,11 @@ The extension reads Facebook's English labels. If your Facebook is in another la
 Each site is one small file in `src/sites/`. To add one:
 
 1. Copy `src/sites/x.js` to a new file, such as `src/sites/example.js`.
-2. In it, list the site's ways of showing ads. Each way has `posts()`, which returns the posts on the page, and `isAd(post)`, which returns true for an ad. A post is an ad when any way finds it, and an error in one way does not stop the others. Sites often show ads in more than one way at the same time, for example while they test new markup on some users. Add a way for each one you find. The helpers in `src/core.js` cover the common cases.
+2. In it, list the site's ways of showing ads. Each way has `posts()`, which returns the posts on the page, and `isAd(post)`, which returns true for an ad. A post is an ad when any way finds it. Sites often show ads in more than one way at once, for example while they test new markup, so add a way for each one you find. `src/sites/facebook.js` shows a site with several ways, and the helpers in `src/core.js` cover the common cases.
 3. Add an entry for the site to `content_scripts` in `manifest.json`. List `src/core.js` before the new file, and include `src/highlight.css`.
 4. Add tests for the site to `test/`, like `test/x.test.js` or `test/facebook.test.js`. The shared code already has its own tests in `test/core.test.js`.
 
-A site can also have its own CSS file for small changes to the look, like `src/sites/x.css`.
+A site can also have its own CSS file for small changes to the look, like `src/sites/x.css`. List it after `src/highlight.css` in the site's entry.
 
 To run the tests, you need Node.js:
 
