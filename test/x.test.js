@@ -200,7 +200,14 @@ test('marks every ad and only the ads', async () => {
   const ads = await tab.evaluate(() => [...document.querySelectorAll('article[id^="ad"]')].map((a) => a.id).sort());
   assert.deepEqual(await markedIds(), ads);
   // No part of a normal post gets a mark of any kind.
-  assert.equal(await tab.evaluate(() => document.querySelector('article[id^="normal"] [data-ad-highlighter-keep-colors]')), null);
+  assert.equal(
+    await tab.evaluate(() =>
+      document.querySelector(
+        'article[id^="normal"] :is([data-ad-highlighter], [data-ad-highlighter-keep-colors], [data-ad-highlighter-full-width], [data-ad-highlighter-around-kept])',
+      ),
+    ),
+    null,
+  );
 });
 
 test('paints an ad yellow with dark text and underlined links', async () => {

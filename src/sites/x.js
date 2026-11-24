@@ -58,26 +58,33 @@
   }
 
   adHighlighter.watch({
-    // X shows each post as an <article>. A post shown inside another post
-    // is part of that post, so only the outermost articles count.
-    posts: () => adHighlighter.outermost('article'),
+    // X shows ads in one way today. Add a way here if X starts to show ads
+    // in another way.
+    ways: [
+      {
+        // X shows each post as an <article>. A post shown inside another
+        // post is part of that post, so only the outermost articles count.
+        posts: () => adHighlighter.outermost('article'),
 
-    isAd(post) {
-      const labels = adHighlighter.findLabels(post, AD_LABELS, NOT_A_LABEL);
-      if (labels.length === 0) return false;
+        isAd(post) {
+          const labels = adHighlighter.findLabels(post, AD_LABELS, NOT_A_LABEL);
+          if (labels.length === 0) return false;
 
-      // Check 2: the post shows no timestamp of its own.
-      const ownTime = adHighlighter.findOwn(post, 'time', INNER_POST);
-      if (ownTime === null && pageShowsOwnTimestamps()) return true;
+          // Check 2: the post shows no timestamp of its own.
+          const ownTime = adHighlighter.findOwn(post, 'time', INNER_POST);
+          if (ownTime === null && pageShowsOwnTimestamps()) return true;
 
-      // Check 1: the label sits on the same line as the author's name.
-      const author = adHighlighter.findOwn(post, '[data-testid="User-Name"]', INNER_POST);
-      return author !== null && labels.some((label) => adHighlighter.onSameLine(label, author));
-    },
+          // Check 1: the label sits on the same line as the author's name.
+          const author = adHighlighter.findOwn(post, '[data-testid="User-Name"]', INNER_POST);
+          return author !== null && labels.some((label) => adHighlighter.onSameLine(label, author));
+        },
+      },
+    ],
 
     // Photos and videos keep X's colors, so text drawn on top of them stays
-    // readable. (The core already keeps X's colors on any part with its own
-    // background, such as a "Watch now" button.)
+    // readable. (The core also keeps the colors of a smaller part with its
+    // own background, such as a "Watch now" button. It paints a part with
+    // its own background that is as wide as the post like the ad.)
     keepColors: MEDIA.join(','),
   });
 })();

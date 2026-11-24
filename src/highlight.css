@@ -1,15 +1,36 @@
 /* Ad Highlighter: the look of a highlighted ad, on every site.
-   src/core.js adds the data-ad-highlighter attribute to each ad. */
+   src/core.js adds the attributes that this file styles. */
 
+/* The ad is yellow. Each part with its own background that spans the
+   ad's full width, such as the card the site draws the ad on, is painted
+   yellow too, with an image layer. That way the part's own background
+   color stays as the site set it, and src/core.js can still read it. */
 [data-ad-highlighter] {
   background-color: #ffe500 !important;
 }
+[data-ad-highlighter] [data-ad-highlighter-full-width] {
+  background-image: linear-gradient(#ffe500, #ffe500) !important;
+  /* The layer fills the whole part, whatever the site set for its own
+     background image. */
+  background-size: auto !important;
+  background-repeat: repeat !important;
+  background-position: 0 0 !important;
+  background-origin: border-box !important;
+  background-clip: border-box !important;
+}
 
 /* Dark text and icons, so the ad stays easy to read on yellow in light and
-   dark mode. Parts that src/core.js marks with
-   data-ad-highlighter-keep-colors keep the site's own colors: parts with a
-   background of their own, and parts that match the site's keepColors. */
+   dark mode. Two kinds of elements keep the site's colors. The first kind
+   is the parts that src/core.js marks with data-ad-highlighter-keep-colors,
+   and everything inside them. The second kind is the elements around those
+   parts that it marks with data-ad-highlighter-around-kept. They have no
+   text of their own, and they let a kept part whose text color comes from
+   around it get the site's color, not the dark color. */
 [data-ad-highlighter]
-  *:not([data-ad-highlighter-keep-colors], [data-ad-highlighter-keep-colors] *) {
+  *:not(
+    [data-ad-highlighter-keep-colors],
+    [data-ad-highlighter-keep-colors] *,
+    [data-ad-highlighter-around-kept]
+  ) {
   color: #0f1419 !important;
 }

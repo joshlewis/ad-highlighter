@@ -14,6 +14,12 @@
       "js": ["src/core.js", "src/sites/x.js"],
       "css": ["src/highlight.css", "src/sites/x.css"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.facebook.com/*", "https://web.facebook.com/*"],
+      "js": ["src/core.js", "src/sites/facebook.js"],
+      "css": ["src/highlight.css", "src/sites/facebook.css"],
+      "run_at": "document_idle"
     }
   ]
 }

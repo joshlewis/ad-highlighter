@@ -1,0 +1,8 @@
+/* Facebook: changes to the shared look in src/highlight.css. */
+
+/* Links in a post's text lose Facebook's blue on yellow, so underline them
+   to keep them visible. Facebook tags the text an author wrote with these
+   attributes. */
+[data-ad-highlighter] :is([data-ad-rendering-role="story_message"], [data-ad-preview="message"]) a {
+  text-decoration: underline !important;
+}
