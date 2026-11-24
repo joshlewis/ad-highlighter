@@ -21,7 +21,7 @@ const adHighlighter = (() => {
   // The attribute that marks a part with its own background that spans the
   // full width of the ad, such as the card the site draws the post on, the
   // bar under a link, or the space beside a photo. src/highlight.css paints
-  // it like the ad, because otherwise it would hide the yellow.
+  // it like the ad, because otherwise it would hide the highlight color.
   const FULL_WIDTH = 'data-ad-highlighter-full-width';
 
   // The attribute that marks an element around a part that keeps its colors
@@ -36,8 +36,8 @@ const adHighlighter = (() => {
   // What happens to one part of an ad. Each kind lists the marks it gives
   // the part.
   const PART = Object.freeze({
-    // Takes the dark text of the ad.
-    DARK_TEXT: Object.freeze({ keepColors: false, fullWidth: false }),
+    // Takes the ad's text color.
+    AD_TEXT: Object.freeze({ keepColors: false, fullWidth: false }),
     // Keeps the site's colors.
     KEEP_COLORS: Object.freeze({ keepColors: true, fullWidth: false }),
     // Spans the full width of the ad, and is painted like the ad.
@@ -224,14 +224,14 @@ const adHighlighter = (() => {
   //
   //   - a part that matches the site's keepColors selector, such as a photo;
   //   - a layer placed on top of one of those, such as a time label on a
-  //     video, because dark text on a photo would be hard to read;
+  //     video, because the ad's text color on a photo would be hard to read;
   //   - a part that draws a picture as its background, like a photo does.
   //
   // A part that paints a background color of its own, at least half
   // opaque, is painted like the ad when it spans the full width of the
   // post, such as the card or the bar under a link. A narrower part with a
   // background, such as a button, keeps the site's colors, and so does any
-  // other layer, so that the yellow never covers a photo.
+  // other layer, so that the highlight color never covers a photo.
   function partKind(part, post, selector, keptBoxes) {
     if (selector !== undefined && part.matches(selector)) return PART.KEEP_COLORS;
     const style = getComputedStyle(part);
@@ -239,8 +239,9 @@ const adHighlighter = (() => {
     if (onTop && overlapsAny(part.getBoundingClientRect(), keptBoxes)) return PART.KEEP_COLORS;
     if (style.backgroundImage.includes('url(')) return PART.KEEP_COLORS;
     // src/highlight.css paints a full-width part with an image layer, never
-    // a background color, so this reads the site's color, not the yellow.
-    if (colorOpacity(style.backgroundColor) < 0.5) return PART.DARK_TEXT;
+    // a background color, so this reads the site's color, not the
+    // highlight color.
+    if (colorOpacity(style.backgroundColor) < 0.5) return PART.AD_TEXT;
     return spansWidth(part, post) && !onTop ? PART.FULL_WIDTH : PART.KEEP_COLORS;
   }
 
@@ -254,7 +255,7 @@ const adHighlighter = (() => {
   // The elements between post and each part in parts that keeps its colors
   // and holds text, leaving out elements with text of their own. A photo
   // holds no text, so the elements around it need no mark. An element with
-  // text of its own takes the dark text, so its text stays readable.
+  // text of its own takes the ad's text color, so its text stays readable.
   function aroundKept(post, parts) {
     const around = new Set();
     for (const [part, kind] of parts) {

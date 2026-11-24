@@ -1,6 +1,6 @@
 # Ad Highlighter
 
-A Chrome extension that paints ads bright yellow, so you can tell at a glance what is an ad and what isn't.
+A Chrome extension that paints ads bright yellow (or a color you pick), so you can tell at a glance what is an ad and what isn't.
 
 ![Without Ad Highlighter, an ad on X looks like the posts around it. With Ad Highlighter, the same ad is bright yellow with dark text, and the posts around it stay as they were.](screenshots/before-after.png)
 
@@ -10,15 +10,15 @@ A Chrome extension that paints ads bright yellow, so you can tell at a glance wh
 
 On a supported site, Ad Highlighter finds the posts that the site labels as ads and paints each one bright yellow with dark text. Every other post stays exactly as it was. Inside an ad, wide parts with their own background, such as the bar under a link, turn yellow too. Photos, videos, captions on them, and smaller parts such as a "Shop now" button keep their own colors, so they stay readable. On Facebook, it also paints the "Sponsored" box at the side of the page.
 
-That is all it does. There are no settings.
+To pick another color, click Ad Highlighter's button in the toolbar. Click one of the colors, mix your own with the sliders, or type a hex code. Ads get dark text on a bright color and white text on a deep one, whichever is easier to read. Open tabs change at once. The color is the only setting.
 
 ## Privacy
 
 Ad Highlighter never phones home and stores nothing about you.
 
 - It makes no network requests of any kind.
-- It saves nothing: no settings, no history, no cookies, no data.
-- It asks Chrome for no permissions beyond access to the sites it supports, and runs nowhere else.
+- It saves one thing, the color you pick, in your browser on this computer. Nothing else: no history, no cookies, no data.
+- It asks Chrome for one permission, storage, to keep that color. Beyond that it can reach only the sites it supports, and runs nowhere else.
 - On those sites, it reads the page as it loads and as new posts appear, finds the ads, and colors them. Nothing else.
 
 The code is short, so you can check this yourself in [`src/`](src/).
@@ -46,6 +46,7 @@ Ad Highlighter is not in the Chrome Web Store, so you load it from a folder.
 3. Turn on **Developer mode** (top right).
 4. Click **Load unpacked** and choose the folder.
 5. Reload any open x.com or facebook.com tab.
+6. To pick the color, pin Ad Highlighter from the Extensions menu (the puzzle piece) in the toolbar, then click its button.
 
 To update, get the new version the same way, click the reload button on Ad Highlighter's card in `chrome://extensions`, and reload the site's tabs.
 
@@ -74,7 +75,7 @@ Facebook works hard to stop scripts from reading its ad label. Today the word "A
 
 A post is an ad when any of these ways finds the label on the author's line or the line just under it, where Facebook shows it. On ads about social issues or politics, that line reads "Sponsored · Paid for by …", which counts too. A hidden copy of the label never counts, and neither does the same word anywhere else, such as in the post's text, a video or a shared post. A fourth way finds the box at the side of the page whose heading is "Sponsored".
 
-Links in an ad's text lose Facebook's blue on yellow, so Ad Highlighter underlines them.
+Links in an ad's text lose Facebook's blue on the highlight color, so Ad Highlighter underlines them.
 
 The extension reads Facebook's English labels. If your Facebook is in another language, add the words Facebook shows on ads to `AD_LABELS` in [`src/sites/facebook.js`](src/sites/facebook.js).
 
@@ -84,7 +85,7 @@ Each site is one small file in `src/sites/`. To add one:
 
 1. Copy `src/sites/x.js` to a new file, such as `src/sites/example.js`.
 2. In it, list the site's ways of showing ads. Each way has `posts()`, which returns the posts on the page, and `isAd(post)`, which returns true for an ad. A post is an ad when any way finds it. Sites often show ads in more than one way at once, for example while they test new markup, so add a way for each one you find. `src/sites/facebook.js` shows a site with several ways, and the helpers in `src/core.js` cover the common cases.
-3. Add an entry for the site to `content_scripts` in `manifest.json`. List `src/core.js` before the new file, and include `src/highlight.css`.
+3. Add an entry for the site to `content_scripts` in `manifest.json`. List `src/core.js`, `src/color.js` and `src/page-color.js` before the new file, and include `src/highlight.css`.
 4. Add tests for the site to `test/`, like `test/x.test.js` or `test/facebook.test.js`. The shared code already has its own tests in `test/core.test.js`.
 
 A site can also have its own CSS file for small changes to the look, like `src/sites/x.css`. List it after `src/highlight.css` in the site's entry.

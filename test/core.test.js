@@ -455,12 +455,12 @@ test('marks the elements around a kept part with text, but never one with text o
     }),
   );
   assert.deepEqual(result.first, [
-    // The emoji holds no text, so the text around it takes the dark text.
+    // The emoji holds no text, so the text around it takes the ad's text color.
     ['text', false, false],
     ['emoji', true, false],
     ['wrap', false, true],
     ['bar', true, false],
-    // This element has text of its own, so it takes the dark text.
+    // This element has text of its own, so it takes the ad's text color.
     ['mixed', false, false],
     ['button', true, false],
     // A photo holds no text, so the element around it needs no mark.
@@ -558,7 +558,7 @@ test('reads the site background color of a full-width part, not the yellow it pa
       };
       const first = marks();
       // The site takes away the card's background. The card is now plain
-      // text, so it takes the dark text.
+      // text, so it takes the ad's text color.
       document.getElementById('card').style.background = 'none';
       change();
       await nextFrame();

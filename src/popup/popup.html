@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>Ad Highlighter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <h1>Highlight color</h1>
+
+    <!-- A sample ad in the color picked. The note under it says the same
+         for screen readers. -->
+    <div id="preview" class="preview" aria-hidden="true">
+      <strong>Sponsored</strong>
+      <span>This is how ads look.</span>
+    </div>
+    <p id="text-note" class="note" aria-live="polite"></p>
+
+    <fieldset>
+      <legend>Pick a color</legend>
+      <div id="swatches" class="swatches"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Or mix your own</legend>
+      <div class="slider">
+        <label for="hue">Hue</label>
+        <input id="hue" type="range" min="0" max="360" step="1">
+      </div>
+      <div class="slider">
+        <label for="saturation">Vividness</label>
+        <input id="saturation" type="range" min="0" max="100" step="1">
+      </div>
+      <div class="slider">
+        <label for="lightness">Lightness</label>
+        <input id="lightness" type="range" min="0" max="100" step="1">
+      </div>
+      <div class="hex">
+        <label for="hex">Hex code</label>
+        <input id="hex" type="text" maxlength="7" spellcheck="false" autocomplete="off" aria-describedby="hex-help">
+      </div>
+      <p id="hex-help" class="note">Three or six digits, such as #ffe500.</p>
+    </fieldset>
+
+    <button id="reset" type="button" class="reset">Back to yellow</button>
+    <p id="status" class="status" role="status"></p>
+  </main>
+  <script src="../color.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
